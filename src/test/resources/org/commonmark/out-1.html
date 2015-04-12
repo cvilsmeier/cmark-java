@@ -1,0 +1,145 @@
+<h1>Build Prozess</h1>
+<p>Voraussetzungen:</p>
+<ul>
+<li>Entwicklungsumgebung ist Windows</li>
+<li>Eclipse Version &quot;Luna&quot; mit SVN Plugin</li>
+<li>java 8 von Oracle muss installiert sein</li>
+<li>Zugang zum comron SVN repository muss gehen</li>
+</ul>
+<h2>Kern auf Windows builden</h2>
+<p>Eclipse starten.</p>
+<p>Projekt mcom-common aus SVN auschecken: /mcom/mcom-common/trunk.
+In Eclipse mcom-common builden, build.xml Target &quot;rebuild-all&quot;.
+Das erzeugt einen build/ Ordner. In build/dist/ liegen nun ein paar
+jar Files.</p>
+<p>Projekt mcom-core aus SVN auschecken: /mcom/mcom-core/trunk.
+In Eclipse mcom-core builden, build.xml Target &quot;rebuild-all&quot;.
+Das &quot;rebuild-all&quot; Target kopiert alle mcom-common jar Files
+ins mcom-core Projekt. Build-Ergebnisse liegen nun in mcom-core/build/.</p>
+<p>In C:\Temp folgende Ordner Struktur anlegen:</p>
+<pre><code>C:\Temp
+    └── mcom
+        ├── core
+        │   └── data
+        ├── modules
+        └── system
+</code></pre>
+<h2>Kern auf Windows starten</h2>
+<p>Der Kern kann nun gestartet werden, main-Klasse ist de.comron.mcom.core.CoreMain
+Das erste Starten schlägt fehl weil dem Kern nicht mitgeteilt wurde wo
+seine Home- und Datenordner usw. sind. Das muß über CLI-Parameter erfolgen.
+Dazu in Eclipse Debug Configuration &quot;CoreMain&quot; bearbeiten:
+CoreMain braucht folgende Arguments:</p>
+<pre><code>-home    C:/eclipse-workspaces/luna/comron/mcom-core/home
+-data    C:/Temp/mcom/core/data
+-modules C:/Temp/mcom/modules
+-system  C:/Temp/mcom/system
+-allowEmptyLogin true
+</code></pre>
+<p>Die einzelnen Parameter sind in der CoreMain.java, Method &quot;printUsage()&quot;
+beschrieben.  Das &quot;-home&quot; muss wahrscheinlich an die eigene Eclipse-Installation
+angepasst werden.</p>
+<p>Kern sollte jetzt startbar sein und in C:\Temp\mcom\core\data eine
+leere sqlite3 Datenbank &quot;db&quot; eine core.log und eine log4j.properties
+Datei anlegen.
+Die log4j.properties ist vom Kern selbst generiert und loggt per default
+nur in core.log. Zum Entwickeln kann die Datei editiert werden und der
+console Appender enabled und logLevel auf DEBUG gesetzt werden.
+Die Datenbank kann man mit <a href="http://www.sqlite.org/download.html">sqlite3</a>,
+Abschnitt &quot;Precompiled Binaries for Windows&quot; anschauen und ändern.
+Oder mit jedem JDBC-fähigen DB-Tool.</p>
+<p>So, der Kern läuft. Nun auf http://localhost gehen und &quot;MAS Login&quot; drücken.
+In der Login-Box alles leer lassen und &quot;Login&quot; drücken. Man sollte dann als
+Superuser eingeloggt sein. Das geht weil &quot;-allowEmptyLogin&quot; auf
+true steht. Produktiv unbedingt &quot;-allowEmptyLogin&quot; weglassen!!</p>
+<p>Das Starten des Kerns über die Kommandozeile ist auch möglich, mit folgendem Aufruf:</p>
+<pre><code>#&gt; java -cp &quot;C:\eclipse-workspaces\luna\comron\mcom-core\home\lib\*;C:/eclipse-workspaces/luna/comron/mcom-core/bin&quot; 
+        de.comron.mcom.core.CoreMain
+        -home C:\eclipse-workspaces\luna\comron\mcom-core\home
+        -data C:\Temp\mcom\core\data
+        -modules C:\Temp\mcom\modules
+        -system C:\Temp\mcom\system
+        -allowEmptyLogin true
+</code></pre>
+<p>oder direkt aus dem Projektverzeichnis:</p>
+<pre><code>#&gt; cd C:\eclipse-workspaces\luna\comron\mcom-core
+#&gt; java -cp &quot;home\lib\*;bin&quot; 
+        de.comron.mcom.core.CoreMain
+        -home .
+        -data C:\Temp\mcom\core\data
+        -modules C:\Temp\mcom\modules
+        -system C:\Temp\mcom\system
+        -allowEmptyLogin true
+</code></pre>
+<p>Prinzipiell kann der Kern von jedem Verzeichnis aus aufgerufen werden, intern
+verwendet der Kern nur feste Pfade. Empfohlen ist aber der Aufruf direkt
+aus dem home/ Folder. (Vielleicht gibt's ja doch mal einen Segfault in der
+JVM, dann finden wir die Diagnosefiles leichter.)</p>
+<h2>Modul auf Windows builden und ausführen</h2>
+<p>Am Beispiel von mod-stress. Dazu mcom/mcom-modframe und mcom/mcom-mod-stress
+als zwei eigene Eclipse-Projekte aus SVN auschecken.
+Das Projekt modframe ist ein Framework für mcom Module. Dieses zuerst builden,
+build-xml Target &quot;rebuild-all&quot;. Dann das Projekt mcom-mod-stress builden,
+auch mit &quot;rebuild-all&quot;. Das ergibt im mcom-mod-stress/build/dist ein ZIP file
+das das Modul &quot;Stress&quot; enthält. Dieses kann im Kern über die Web-Oberfläche
+als Modul installiert, konfiguriert und gestartet werden.</p>
+<h2>Projektstruktur</h2>
+<p>mcom besteht aus folgenden Eclipse Projekten:</p>
+<ul>
+<li>
+<p>mcom-common
+Bibliothek die vom Kern und von den Modulen benutzen wird.
+Enthält Klasen um Telegramme zu senden/empfangen und
+manifest.json und settings.properties Dateien zu lesen/parsen/schreiben.</p>
+</li>
+<li>
+<p>mcom-core<br />
+Der Kern</p>
+</li>
+<li>
+<p>mcom-modframe
+Enthält einen Rahmen der für die Modulentwicklung benutzt werden kann</p>
+</li>
+<li>
+<p>mcom-mod-*
+Jedes mas-mod-<modulename> Projekt enthält ein Modul, wobei <modulname> der eindeutige
+Modulname ist, z.B. mas-mod-mail, mcom-mod-aastra-omm, mcom-mod-foobar, usw.</p>
+</li>
+</ul>
+<p>Unter den Projekten gibt's Abhängigkeiten, und zwar die folgenden:</p>
+<pre><code>      +---------------+     +---------------+
+      | mcom-mod-mail | ... | mcom-mod-zero |
+      +---------------+     +---------------+
+              |                |
+              +-----+      +---+
+                    |      |
+                    |      |
+                    V      V
++-----------+   +---------------+
+| mcom-core |   | mcom-modframe |
++-----------+   +---------------+
+      |                |
+      |                |
+      |                |
+      V                V
++------------------------------+
+|          mcom-common         |
++------------------------------+
+</code></pre>
+<p>Wenn also zB an mcom-modframe was geändert wird müssen diese Änderungen in alle
+Projekte übernommen werden die davon betroffen sind. Dafür gibt's in jedem Projekt
+ein build.xml mit einem &quot;update-*&quot; Target. Dieses holt den aktuellen Stand des
+benötigten Projekts in den eigenen Verzeichnisbaum. (Wobei aber zu beachten ist dass
+das benötigte Projekt selbst erstmal gebuildet werden muss.)
+Alle Projekte gehen in das eigene build/ Verzeichnis, das erstellt wird sollte es
+noch nicht existieren.</p>
+<p>Um alle mcom Projekte zu builden muß man also folgende Schritte ausführen:</p>
+<ol>
+<li>mcom-common &quot;rebuild-all&quot;</li>
+<li>mcom-core &quot;rebuild-all&quot;</li>
+<li>mcom-modframe &quot;rebuild-all&quot;</li>
+<li>mcom-mod-zero &quot;rebuild-all&quot;
+(Schritt 4 für alle mcom-mod-* Projekte wiederholen)</li>
+</ol>
+<p>Die Build-Ergebnisse finden sich dann im Ordner build/dist/ wieder.</p>
+
