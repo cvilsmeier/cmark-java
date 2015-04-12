@@ -50,5 +50,5 @@ John MacFarlane is the main author of [cmark].
   
  
 [cmark]: https://github.com/jgm/cmark
-[Commonmark]: https://commonmark.org
+[Commonmark]: http://commonmark.org
 
