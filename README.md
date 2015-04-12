@@ -1,4 +1,5 @@
-# Cmark Java Wrapper
+# cmark-wrapper
+A cmark java wrapper library
 
 Cmark-wrapper is a java library that converts [Commonmark] 
 Markdown to HTML.

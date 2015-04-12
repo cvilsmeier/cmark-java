@@ -24,7 +24,7 @@
 
 	<target name="jar" depends="init, compile">
 		<mkdir dir="build/jar"/>
-		<jar jarfile="build/jar/cmark-wrapper-${version}-bin.jar">
+		<jar jarfile="build/jar/cmark-wrapper-${version}.jar">
 			<fileset dir="build/bin"/>
 		</jar>
 		<jar jarfile="build/jar/cmark-wrapper-${version}-sources.jar">
@@ -37,6 +37,9 @@
 		<copy todir="build/dist" >
 			<fileset dir="build/jar"/>
 		</copy>
+		<zip zipfile="build/dist/precompiled.zip">
+			<fileset dir="." includes="precompiled/**"/>
+		</zip>
 	</target>
 
 	<target name="build-all" depends="init, compile, jar, dist">
