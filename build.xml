@@ -6,7 +6,7 @@
 			<!-- <fileset dir="app/lib" includes="*.jar"/> -->
 		</path>
 		<property name="debug" value="false"/>
-		<property name="version" value="0.1.0"/>
+		<property name="version" value="0.2.0"/> <!-- sync version with changelog.txt -->
 	</target>
 	
 	<target name="clean" depends="init">

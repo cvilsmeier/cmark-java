@@ -1,5 +1,7 @@
 
-v0.1.0 (2015-04-12)
-- first version, based on cmark v0.18.3
+v0.1.0 (2015-04-12) cmark v0.18.3
+- first version 
 
+v0.2.0 (2015-04-13) cmark v0.18.3
+- added supoprt for cmark command line options
 
