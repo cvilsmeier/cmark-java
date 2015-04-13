@@ -1,15 +1,15 @@
-# cmark-wrapper
+# cmark-java
 A cmark java wrapper library
 
-Cmark-wrapper is a java library that converts [Commonmark] 
+Cmark-java is a java library that converts [Commonmark] 
 Markdown to HTML.
-Under the covers, cmark-wrapper uses [cmark] 
+Under the covers, cmark-java uses [cmark] 
 by John MacFarlane (one of the authors of the commonmark spec) to do its job.
 
 
 ## Usage
 
-With cmark-wrapper, converting md to html is as easy as:
+With cmark-java, converting md to html is as easy as:
 
 ~~~
 Wrapper wrapper = new Wrapper();
@@ -46,7 +46,7 @@ please refer to [cmark] for build instructions.
 
 ## Authors
 
-Christoph Vilsmeier is the author of cmark-wrapper.
+Christoph Vilsmeier is the author of cmark-java.
 John MacFarlane is the main author of [cmark].
   
  
