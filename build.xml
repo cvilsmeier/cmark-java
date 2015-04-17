@@ -1,12 +1,12 @@
 
-<project name="cmark-wrapper" default="build-all" basedir=".">
+<project name="cmark-java" default="build-all" basedir=".">
 
 	<target name="init">
 		<path id="cp.ref">
 			<!-- <fileset dir="app/lib" includes="*.jar"/> -->
 		</path>
 		<property name="debug" value="false"/>
-		<property name="version" value="0.2.0"/> <!-- sync version with changelog.txt -->
+		<property name="version" value="0.2.1"/> <!-- sync version with changelog.txt -->
 	</target>
 	
 	<target name="clean" depends="init">
@@ -24,10 +24,10 @@
 
 	<target name="jar" depends="init, compile">
 		<mkdir dir="build/jar"/>
-		<jar jarfile="build/jar/cmark-wrapper-${version}.jar">
+		<jar jarfile="build/jar/cmark-java-${version}.jar">
 			<fileset dir="build/bin"/>
 		</jar>
-		<jar jarfile="build/jar/cmark-wrapper-${version}-sources.jar">
+		<jar jarfile="build/jar/cmark-java-${version}-sources.jar">
 			<fileset dir="src/main"/>
 		</jar>
 	</target>
